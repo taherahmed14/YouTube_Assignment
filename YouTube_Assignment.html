@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>YouTube</title>
+    
+
+    <style>
+
+      *{
+        font-family: sans-serif;
+        background-color: black;
+      }
+
+      body{
+        margin: 0;
+      }
+
+      #header{
+        width: 100%;
+        height: 60px;
+        border-bottom: 1px solid gray;
+        display: flex;
+      }
+
+      #logo{
+        height: 100%;
+        margin-left: 4%;
+        cursor: pointer;
+      }
+
+      #youtubeLogo{
+        height: 100%;
+        color: white;
+      }
+
+      #inputSearch{
+        width: 600px;
+        height: 65%;
+        margin-top: 10px;
+        margin-left: 20%;
+        /* border: 1px solid red; */
+        display: flex;
+      }
+
+      #query{
+        border: 1px solid gray;
+        width: 80%;
+        height: 95%;
+        color: white;
+      }
+
+      #searchBtn{
+        border: 1px solid gray;
+        width: 10%;
+        height: 100%;
+        background-color: gray;
+      }
+
+      #searchBtn > img{
+        width: 35%;
+        margin-top: 13%;
+        margin-left: 30%;
+        background-color: gray;
+        cursor: pointer;
+      }
+
+      #videos, #PopularVideos{
+        margin: auto;
+        width: 1200px;
+        display: grid;
+        grid-template-columns: repeat(4, 20%);
+        grid-gap: 5%;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <div id="header">
+
+      <div id="logo" onclick="back()">
+        <img id="youtubeLogo" src="https://www.openthenews.com/wp-content/uploads/2020/09/YouTube-logo-black-background-1536x983.png">
+      </div>
+
+      <div id="inputSearch">
+
+        <input type="text" id="query" placeholder="Search">
+        <div id="searchBtn" onclick="searchVideos()">
+          <img src="https://www.iconsdb.com/icons/preview/white/search-13-xxl.png">
+        </div>
+
+      </div>
+     
+
+    </div>
+
+    <div id="videos"></div>
+
+    <div id="PopularVideos"></div>
+
+  </body>
+</html>
+
+<script>
+
+
+// AIzaSyAwpU-FpCkk5anjeyVn9SRM8Am7oAe8piA
+
+//AIzaSyAVBhwL1Oj4Q6WSBdqEHupeBzVt6uRIwEQ
+
+const videos = document.getElementById("videos");
+const popularVideos = document.getElementById("PopularVideos");
+
+async function fetchPopular(){
+
+  let res = await 
+    fetch("https://youtube.googleapis.com/youtube/v3/search?order=viewCount&regionCode=IN&key=AIzaSyAVBhwL1Oj4Q6WSBdqEHupeBzVt6uRIwEQ&maxResults=20");
+
+  let data = await res.json();
+
+  console.log(data);
+
+  showPopular(data.items);
+
+}
+
+fetchPopular();
+
+function showPopular(videos){
+
+  videos.forEach(({ id: { videoId } }) => {
+
+    let div = document.createElement("div");
+
+    div.innerHTML = `<iframe width="280" height="180" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+
+    div.style.marginTop = "5px";
+
+    popularVideos.append(div);
+
+  });
+
+}
+
+function back(){
+
+  videos.innerHTML = null;
+  popularVideos.innerHTML = null;
+  
+  fetchPopular();
+}
+
+async function searchVideos(){
+
+    let query = document.getElementById("query").value;
+
+    let res = await 
+    fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${query}&type=video&key=AIzaSyAVBhwL1Oj4Q6WSBdqEHupeBzVt6uRIwEQ&maxResults=20`);
+   
+    let data = await res.json();
+
+    console.log(data);
+
+    appendVideos(data.items);
+
+}
+
+function appendVideos(video_data){
+
+    videos.innerHTML = null;
+    popularVideos.innerHTML = null;
+
+    video_data.forEach(({ id: { videoId } }) => {
+
+        let div = document.createElement("div");
+
+        div.innerHTML = `<iframe width="280" height="180" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+
+        div.style.marginTop = "5px";
+
+        videos.append(div);
+
+    });
+
+}
+
+
+
+</script>
