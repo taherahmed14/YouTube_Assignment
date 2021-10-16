@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>YouTube</title>
+    
+
+    <style>
+
+      *{
+        font-family: sans-serif;
+        background-color: #212121;
+      }
+
+      body{
+        margin: 0;
+      }
+
+      #header{
+        width: 100%;
+        height: 60px;
+        border-bottom: 1px solid gray;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      #logo{
+        height: 100%;
+        width: 100px;
+        margin-left: 4%;
+        cursor: pointer;
+        /* border: 1px solid red; */
+      }
+
+      #youtubeLogo{
+        width: 100%;
+        height: 100%;
+        background-color: #212121;
+        /* border: 1px solid red; */
+      }
+
+      #inputSearch{
+        width: 40%;
+        height: 65%;
+        margin-top: 10px;
+        margin-left: 300px;
+        /* border: 1px solid red; */
+        display: flex;
+      }
+
+      #query{
+        border: 1px solid rgb(70, 66, 66);
+        width: 80%;
+        height: 95%;
+        color: white;
+        background-color: #181818;
+      }
+
+      #searchBtn{
+        border: 1px solid rgb(70, 66, 66);
+        width: 10%;
+        height: 100%;
+        background-color: rgb(70, 66, 66);
+        cursor: pointer;
+      }
+
+      #searchBtn > img{
+        width: 35%;
+        margin-top: 13%;
+        margin-left: 30%;
+        background-color: rgb(70, 66, 66);
+        cursor: pointer;
+      }
+
+      #userName{
+          width: 10%;
+          height: 10px;
+          margin: 1% 0 0 8%;
+          padding: 5px;
+          /* border: 1px solid red; */
+      }
+
+      .usernameSty{
+          text-align: right;
+          color: whitesmoke;
+      }
+
+      #signUpBtn{
+          margin: .8% 0 0 .8%;
+          width: 5%;
+          max-height: 21px;
+          padding: 5px;
+          font-size: 14px;
+          text-align: center;
+          border: 1px solid red;
+          border-radius: 5px;
+          color: white;
+          cursor: pointer;
+      }
+
+
+      .dropDownStyle{
+        width: 31.3%;
+        margin-top: -10px;
+        margin-left: 32%;
+        border: 1px solid white;
+        background-color: white;
+        position: absolute;
+      }
+
+      .dropDnDiv{
+        height: 50px;
+        overflow: hidden;
+        background-color: white;
+        /* border: 0.5px solid gray; */
+        display: flex;
+        flex-wrap: wrap;
+        cursor: pointer;
+      }
+
+      .dropDnImg{
+        width: 10%;
+        background-color: white;
+        /* height: 100%; */
+      }
+
+      .dropDnText{
+        width: 70%;
+        margin-top: 15px;
+        background-color: white;
+      }
+
+      #PopularVideos{
+        margin: auto;
+        margin-top: 20px;
+        width: 1200px;
+        display: grid;
+        grid-template-columns: repeat(4, 20%);
+        grid-gap: 5%;
+      }
+
+      #videos{
+        margin: auto;
+        margin-top: 50px;
+        margin-left: 20%;
+        width: 1200px;
+      }
+
+      .showVidDiv{
+        margin-top: 20px;
+        width: 1000px;
+        height: 200px;
+        /* border: 1px solid red; */
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .contentDiv{
+        width: 60%;
+        margin-left: 10px;
+        /* border: 1px solid blue; */
+      }
+
+      .contentImg{
+        width: 350px;
+        height: 200px;
+        cursor: pointer;
+      }
+
+      .contentTitle{
+        font-size: 18px;
+        margin-top: 5px;
+        font-weight: 600;
+        color: white;
+      }
+
+      .contentTime{
+        font-size: 14px;
+        color: gray;
+        margin-top: 5px;
+      }
+
+      .popDiv{
+        margin-top: 5px;
+        height: 280;
+      }
+
+      .popImg{
+        width: 280px;
+        height: 180px;
+        cursor: pointer;
+      }
+
+      .popTitle{
+        height: 50px;
+        font-weight: 700;
+        overflow: hidden;
+        color: white;
+        margin-top: 5px;
+      }
+
+      .popChannel{
+        height: 50px;
+        color: gray;
+        font-size: 14px;
+        font-weight: 300;
+      }
+
+      .showfullVideo{
+        margin-left: 5%;
+        margin-top: -10px;
+        height: 800px;
+        /* border: 1px solid red; */
+      }
+
+      .showVidTitle{
+        margin-top: 5px;
+        font-weight: 700;
+        overflow: hidden;
+        color: white; 
+        /* border: 1px solid red; */
+      }
+
+      .showVidTime{
+        margin-top: 5px;
+        color: gray;
+        font-size: 14px;
+        font-weight: 300;
+        /* border: 1px solid red; */
+      }
+
+      .usernameSty{
+            text-align: right;
+            font-size: 14px;
+            font-weight: 400;
+            color: whitesmoke;
+        }
+
+    </style>
+  </head>
+  <body>
+
+    <div id="header">
+
+      <div id="logo" onclick="back()">
+        <img id="youtubeLogo" src="https://www.logo.wine/a/logo/YouTube/YouTube-White-Full-Color-Dark-Background-Logo.wine.svg">
+      </div>
+
+      <div id="inputSearch">
+
+        <input oninput="deBounce()" type="text" id="query" placeholder="Search">
+        <div id="searchBtn" onclick="searchVideos()">
+          <img src="https://www.iconsdb.com/icons/preview/white/search-13-xxl.png">
+        </div>
+
+      </div>  
+
+      <div id="userName"></div>
+      <div onclick="signUpPage()" id="signUpBtn">Sign Up</div>
+     
+    </div>
+
+    <div id="dropDown"></div>
+
+    <div id="videos"></div>
+
+    <div id="PopularVideos"></div>
+
+    <div id="showfullVideo"></div>
+
+  </body>
+</html>
+
+<script>
+
+
+// AIzaSyAwpU-FpCkk5anjeyVn9SRM8Am7oAe8piA
+
+//AIzaSyAVBhwL1Oj4Q6WSBdqEHupeBzVt6uRIwEQ
+
+//AIzaSyAESKl6IX5_ShuxAk1IfJHjUyMjU6-2Gr4
+
+//AIzaSyAESKl6IX5_ShuxAk1IfJHjUyMjU6-2Gr4
+
+let dropDown = document.getElementById("dropDown");
+let time;
+
+async function displaySuggestions(query){
+
+  let res = await 
+    fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${query}&type=video&key=AIzaSyAESKl6IX5_ShuxAk1IfJHjUyMjU6-2Gr4&maxResults=8&part=snippet`);
+   
+  let data = await res.json();
+
+  console.log(data);
+
+  return data.items;
+
+}
+
+function showDropDown(videos){
+
+  dropDown.innerHTML = null;
+
+  if(videos === undefined){
+    return false;
+  }
+
+  dropDown.setAttribute("class", "dropDownStyle");
+
+  videos.forEach(({ snippet : { title } }) => {
+
+    let div = document.createElement("div");
+    div.setAttribute("class", "dropDnDiv");
+
+    let searchImg = document.createElement("img");
+    searchImg.src = "https://static.thenounproject.com/png/57113-200.png";
+    searchImg.setAttribute("class", "dropDnImg");
+
+    let text = document.createElement("div");
+    text.innerText = title;
+    text.setAttribute("class", "dropDnText");
+
+    div.append(searchImg, text);
+
+    div.onclick = () => {
+      searchVideos();
+    };
+
+    dropDown.append(div);
+
+  });
+
+}
+
+async function main(){
+
+  let query = document.getElementById("query").value;
+
+  let res = await displaySuggestions(query);
+
+  showDropDown(res);
+
+}
+
+function deBounce(){
+
+  let query = document.getElementById("query").value;
+
+  if(time){
+    clearTimeout(time);
+  }
+
+  time = setTimeout(function(){
+    main();
+
+    if(query == ""){
+      dropDown.removeAttribute("class", "dropDownStyle");
+      dropDown.innerHTML = null;
+    }
+
+  }, 1000);
+
+}
+
+
+const videos = document.getElementById("videos");
+const popularVideos = document.getElementById("PopularVideos");
+let fullVideo = document.getElementById("showfullVideo");
+
+async function fetchPopular(){
+
+  let res = await 
+    fetch("https://youtube.googleapis.com/youtube/v3/search?order=viewCount&regionCode=IN&key=AIzaSyAESKl6IX5_ShuxAk1IfJHjUyMjU6-2Gr4&maxResults=16&part=snippet");
+
+  let data = await res.json();
+
+  console.log(data);
+
+  showPopular(data.items);
+
+}
+
+fetchPopular();
+
+function showPopular(videos){
+
+  fullVideo.innerHTML = null;
+  popularVideos.innerHTML = null;
+
+  videos.forEach((content) => {
+
+    let div = document.createElement("div");
+    div.setAttribute("class", "popDiv");
+
+    // let video = document.createElement("div");
+    // video.innerHTML = `<iframe width="280" height="180" src="https://www.youtube.com/embed/${content.id.videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+    
+    let videoImg = document.createElement("img");
+    videoImg.src = content.snippet.thumbnails.high.url;
+    videoImg.setAttribute("class", "popImg");
+
+    let videotitle = document.createElement("div");
+    videotitle.innerText = content.snippet.title;
+    videotitle.setAttribute("class", "popTitle")
+
+    let channel = document.createElement("div");
+    channel.innerText = content.snippet.channelTitle;
+    channel.setAttribute("class", "popChannel");
+
+    videoImg.onclick = () => {
+      showFullVideo(content.id.videoId, content.snippet.title, content.snippet.publishedAt);
+    };
+
+    div.append(videoImg, videotitle, channel);
+
+    popularVideos.append(div);
+
+  });
+
+}
+
+function back(){
+
+  videos.innerHTML = null;
+  popularVideos.innerHTML = null;
+  
+  fetchPopular();
+}
+
+async function searchVideos(){
+
+    let query = document.getElementById("query").value;
+
+    let res = await 
+    fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${query}&type=video&key=AIzaSyAESKl6IX5_ShuxAk1IfJHjUyMjU6-2Gr4&maxResults=8&part=snippet`);
+   
+    let data = await res.json();
+
+    console.log(data);
+
+    appendVideos(data.items);
+
+}
+
+function appendVideos(video_data){
+
+    document.getElementById("query").value = "Search";
+    fullVideo.innerHTML = null;
+    videos.innerHTML = null;
+    popularVideos.innerHTML = null;
+    dropDown.innerHTML = null;
+    dropDown.removeAttribute("class", "dropDownStyle");
+
+    video_data.forEach((content) => {
+
+        let div = document.createElement("div");
+        div.setAttribute("class", "showVidDiv");
+
+        // let video = document.createElement("div");
+        // video.innerHTML = `<iframe width="350" height="200" src="https://www.youtube.com/embed/${content.id.videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+
+        let videoImg = document.createElement("img");
+        videoImg.src = content.snippet.thumbnails.high.url;
+        videoImg.setAttribute("class", "contentImg");
+
+        let contentDiv = document.createElement("div");
+        contentDiv.setAttribute("class", "contentDiv");
+
+        let title = document.createElement("div");
+        title.innerText = content.snippet.title;
+        title.setAttribute("class", "contentTitle");
+
+        let time = document.createElement("div");
+        time.innerText = content.snippet.publishedAt;
+        time.setAttribute("class", "contentTime");
+
+        let desc = document.createElement("div");
+        desc.innerText = content.snippet.description;
+        desc.setAttribute("class", "contentTime");
+
+        videoImg.onclick = () => {
+          showFullVideo(content.id.videoId, content.snippet.title, content.snippet.publishedAt);
+        };
+
+        contentDiv.append(title, time, desc);
+        div.append(videoImg, contentDiv);
+
+        videos.append(div);
+
+    });
+
+}
+
+function showFullVideo(full_video, video_title, video_time){
+
+  fullVideo.innerHTML = null;
+
+  fullVideo.setAttribute("class", "showfullVideo");
+  
+  videos.innerHTML = null;
+  popularVideos.innerHTML = null;
+  
+  let video = document.createElement("div");
+  video.innerHTML = `<iframe width="1000" height="550" src="https://www.youtube.com/embed/${full_video}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+
+  let title = document.createElement("div");
+  title.innerText = video_title;
+  title.setAttribute("class", "showVidTitle");
+
+
+  let time = document.createElement("div");
+  time.innerText = video_time;
+  time.setAttribute("Class", "showVidTime");
+
+  fullVideo.append(video, title, time);
+
+}
+
+
+function signUpPage(){
+    window.location.href = "YouTube_signup.html";
+}
+
+let user = JSON.parse(localStorage.getItem("YouTube_user"));
+
+if(user.length == 1){
+    console.log(user);
+
+    let message = document.getElementById("userName");
+
+    user.forEach((userDet) => {
+        console.log(userDet.name);
+        message.innerText = "Welcome " + userDet.name;
+        message.setAttribute("class", "usernameSty");
+    });
+
+}
+
+
+
+</script>

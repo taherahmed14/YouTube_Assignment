@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign up</title>
+    
+    <style>
+
+        *{
+            font-family: sans-serif;
+            background-color: white;
+        }
+
+        #signup, #login{
+            margin: auto;
+            margin-top: 20px;
+            width: 400px;
+            height: 470px;
+            border: 1px solid gray;
+            border-radius: 10px;
+        }
+
+        #login{
+            height: 250px;
+        }
+
+        input{
+            width: 350px;
+            height: 40px;
+            margin: 8px 0 0 20px;
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+        
+        .submitBtn{
+            margin: 15px 0 0 100px;
+            width: 200px;
+            height: 40px;
+            color: white;
+            border: 1px solid #1976D2;
+            background-color: #1976D2;
+            cursor: pointer;
+        }
+
+        h1{
+            color: black;
+            text-align: center;
+        }
+    </style>
+    
+</head>
+<body>
+
+    <div>
+
+        <div id="signup">
+    
+            <form onsubmit="Signup(event)" id="signup-form">
+                <h1>Sign Up</h1>
+                <input type="text" id="name" placeholder="name" />
+                <input type="email" id="email" placeholder="email" />
+                <input type="password" id="password" placeholder="password" />
+                <input type="text" id="username" placeholder="username" />
+                <input type="number" id="mobile" placeholder="mobile" />
+                <input type="text" id="description" placeholder="description" />
+                <input type="submit" class="submitBtn"/>
+              </form>
+      
+        </div>
+    
+        <div id="login">
+    
+            <form onsubmit="Login(event)" id="login-form">
+                <h1>Log in</h1>
+                <input type="text" id="user" placeholder="username" />
+                <input type="password" id="pass" placeholder="password" />
+                <input type="submit" class="submitBtn"/>
+              </form>
+      
+        </div>
+    
+    </div>
+    
+</body>
+</html>
+
+<script>
+
+    //to signup
+    function Signup(e){
+        e.preventDefault();
+
+        let form = document.getElementById("signup-form");
+
+        let name = form.name.value;
+        let email = form.email.value;
+        let password = form.password.value;
+        let username = form.username.value; //mistake 1
+        let mobile = form. mobile.value;
+        let description  = form.description.value;
+
+        let user_data = {
+            name,
+            email,
+            password,
+            username,
+            mobile,
+            description
+        }
+
+        user_data = JSON.stringify(user_data); //mistake 2
+
+        fetch("https://masai-api-mocker.herokuapp.com/auth/register", {
+
+            method: "POST",
+            body: user_data, //mistake 3
+            headers: {
+                "Content-Type": "application/json", 
+            }
+
+        })
+        .then((res) => { //mistake 4
+            return res.json();
+        })
+        .then((res) => {
+            console.log(res);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
+    }
+
+    //saymyname@123.com
+    //taher_ahmed_14
+    //breakingbad
+
+    //to login
+    function Login(e){
+        e.preventDefault();
+
+        let form = document.getElementById("login-form");
+
+        let username = form.user.value;
+        let password = form.pass.value;
+        
+        let user_data = {
+            username,
+            password
+        }
+
+        let user = JSON.stringify(user_data); //mistake 5
+
+        fetch("https://masai-api-mocker.herokuapp.com/auth/login", {
+
+            method: "POST",
+            body: user,
+            headers: {
+                "Content-Type": "application/json",
+            }
+
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then((res) => {
+            console.log(res);
+            fetchData(user_data.username, res.token);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
+    }
+
+    function fetchData(username, token){
+
+        fetch(`https://masai-api-mocker.herokuapp.com/user/${username}`, {
+
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then((res) => {
+            console.log(res);
+
+            if(localStorage.getItem("YouTube_user") === null){
+                localStorage.setItem("YouTube_user", JSON.stringify([]));
+            }
+
+            let arr = JSON.parse(localStorage.getItem("YouTube_user"));
+
+            arr[0] = res;
+            localStorage.setItem("YouTube_user", JSON.stringify(arr));
+            console.log(arr);
+
+            setTimeout(() => {
+
+                window.location.href = "YouTube.html";
+
+            }, 3000);
+
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
+    }
+
+
+</script>
